@@ -1,4 +1,3 @@
-export interface IRegisteredMessage {
-    message: string;
-    function(): void
-}
+import { botContext } from "./botContext";
+
+export type RegisteredMessage = Map<string, (ctx: botContext) => void>;
