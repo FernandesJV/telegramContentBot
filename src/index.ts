@@ -1,4 +1,4 @@
-import { Telegraf } from 'telegraf'
+import { Telegraf } from 'telegraf';
 import { MessageManager } from './messageManager/messageManager';
 import { registerMessages } from './messages/messages';
 
@@ -11,7 +11,6 @@ const main = () => {
     const bot = new Telegraf(BOT_TOKEN);
 
     bot.on('message', (ctx) => {
-        console.log(ctx.text)
         MessageManager.manager().executeMessageFunction(ctx);
     })
     registerMessages();
