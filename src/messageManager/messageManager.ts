@@ -1,5 +1,6 @@
 import { botContext } from "../interfaces/botContext";
 import { RegisteredMessage } from "../interfaces/registeredMessage";
+import { mongoService } from "../services/MongoService";
 
 export class MessageManager {
   private static instance: MessageManager;
@@ -24,11 +25,16 @@ export class MessageManager {
   }
 
   public executeMessageFunction(context: botContext): void {
-    const message = context.text?.toUpperCase() ?? '';
-    if (!this.registeredMessages.has(message)) {
+    const originalMessage = context.text ?? '';
+    const upperCaseMessage = originalMessage.toUpperCase();
+    if (!this.registeredMessages.has(upperCaseMessage)) {
+        const linkRegex = /^https/;
+        if(originalMessage.match(linkRegex)) {
+            mongoService.recordContentFromContext(context);
+        }
       return;
     }
-    const messageFunction = this.registeredMessages.get(message);
+    const messageFunction = this.registeredMessages.get(upperCaseMessage);
     if(messageFunction !== undefined) {
         messageFunction(context);
     }
